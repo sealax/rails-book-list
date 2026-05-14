@@ -1,4 +1,18 @@
 <h1><%= @list.name %></h1>
+<%= link_to "Add a book", new_list_bookmark_path(@list) %>
 <%= link_to "Back to lists", lists_path %>
 
->
+
+
+<% @list.bookmarks.each do |bookmark| %>
+  <div>
+    <% if bookmark.book.cover_url.present? %>
+      <%= image_tag bookmark.book.cover_url, width: 120 %>
+    <% end %>
+
+    <h3><%= bookmark.book.title %></h3>
+    <p><%= bookmark.book.author %></p>
+    <p><%= bookmark.comment %></p>
+    <p>Rating: <%= bookmark.rating %></p>
+  </div>
+<% end %>
