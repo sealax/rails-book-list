@@ -1,5 +1,9 @@
 <h1>Add a book to <%= @list.name %></h1>
 
+<% if flash[:alert] %>
+  <p><%= flash[:alert] %></p>
+<% end %>
+
 <%= form_with url: new_list_bookmark_path(@list), method: :get, local: true do %>
   <%= text_field_tag :query, params[:query], placeholder: "Search for a book" %>
   <%= submit_tag "Search" %>
@@ -15,7 +19,7 @@
           <%= hidden_field_tag :title, book["title"] %>
           <%= hidden_field_tag :author, book["author_name"]&.first %>
           <%= hidden_field_tag :open_library_key, book["key"] %>
-          <%= hidden_field_tag :cover_url, book["cover_i"] ? "https://covers.openlibrary.org/b/id/#{book["cover_i"]}-L.jpg" : "" %>
+          <%= hidden_field_tag :cover_url, book["cover_url"] || (book["cover_i"] ? "https://covers.openlibrary.org/b/id/#{book["cover_i"]}-L.jpg" : "") %>
 
           <%= text_area_tag :comment, nil, placeholder: "Add a comment" %>
           <%= number_field_tag :rating, nil, min: 0, max: 5, step: 0.5, placeholder: "Rating" %>

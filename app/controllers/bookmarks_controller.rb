@@ -28,6 +28,7 @@ class BookmarksController < ApplicationController
       book.description = "Added from Open Library"
     end
 
+
   @bookmark = Bookmark.new(
     list: @list,
     book: @book,
@@ -38,7 +39,14 @@ class BookmarksController < ApplicationController
   if @bookmark.save
     redirect_to list_path(@list)
   else
-    @results = []
+    flash.now[:alert] = @bookmark.errors.full_messages.join(", ")
+
+    @results = [ {
+      "title" => params[:title],
+      "author_name" => [ params[:author] ],
+      "key" => params[:open_library_key],
+      "cover_url" => params[:cover_url]
+    } ]
     render :new, status: :unprocessable_entity
   end
   end
