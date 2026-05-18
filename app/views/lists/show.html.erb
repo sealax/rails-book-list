@@ -2,8 +2,6 @@
 <%= link_to "Add a book", new_list_bookmark_path(@list) %>
 <%= link_to "Back to lists", lists_path %>
 
-
-
 <% if @list.bookmarks.any? %>
   <% @list.bookmarks.each do |bookmark| %>
     <div>
@@ -19,4 +17,7 @@
   <% end %>
 <% else %>
   <p>No books in this list yet.</p>
+  <%= link_to "Delete list",
+              list_path(@list),
+              data: { turbo_method: :delete, turbo_confirm: "Delete this list?" } %>
 <% end %>

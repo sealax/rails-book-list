@@ -14,6 +14,17 @@ class ListsController < ApplicationController
     # @bookmark.list = @list
   end
 
+  def destroy
+    @list = List.find(params[:id])
+
+    if @list.bookmarks.any?
+      redirect_to list_path(@list), alert: "Only empty lists can be deleted."
+    else
+      @list.destroy
+      redirect_to lists_path, notice: "List deleted."
+    end
+  end
+
   def create
     @list = List.new(list_params)
 
