@@ -1,23 +1,45 @@
-<h1><%= @list.name %></h1>
-<%= link_to "Add a book", new_list_bookmark_path(@list) %>
-<%= link_to "Back to lists", lists_path %>
+<section class="page-header">
+  <div>
+    <p class="page-eyebrow">Reading list</p>
+    <h1><%= @list.name %></h1>
+    <p class="page-subtitle"><%= pluralize(@list.bookmarks.count, "book") %> saved</p>
+  </div>
+
+  <div class="button-row">
+    <%= link_to "Back", lists_path, class: "btn btn-outline-secondary" %>
+    <%= link_to "Add book", new_list_bookmark_path(@list), class: "btn btn-primary" %>
+  </div>
+</section>
 
 <% if @list.bookmarks.any? %>
-  <% @list.bookmarks.each do |bookmark| %>
-    <div>
-      <% if bookmark.book.cover_url.present? %>
-        <%= image_tag bookmark.book.cover_url, width: 120 %>
-      <% end %>
+  <section class="book-grid">
+    <% @list.bookmarks.each do |bookmark| %>
+      <article class="book-card">
+        <% if bookmark.book.cover_url.present? %>
+          <%= image_tag bookmark.book.cover_url, class: "book-card__cover", alt: bookmark.book.title %>
+        <% else %>
+          <div class="book-card__cover book-card__cover--empty"></div>
+        <% end %>
 
-      <h3><%= bookmark.book.title %></h3>
-      <p><%= bookmark.book.author %></p>
-      <p><%= bookmark.comment %></p>
-      <p>Rating: <%= bookmark.rating %></p>
-    </div>
-  <% end %>
+        <div class="book-card__body">
+          <h2><%= bookmark.book.title %></h2>
+          <p class="book-card__author"><%= bookmark.book.author %></p>
+          <p class="book-card__comment"><%= bookmark.comment %></p>
+          <p class="book-card__rating">Rating: <%= bookmark.rating || "Not rated" %></p>
+        </div>
+      </article>
+    <% end %>
+  </section>
 <% else %>
-  <p>No books in this list yet.</p>
-  <%= link_to "Delete list",
-              list_path(@list),
-              data: { turbo_method: :delete, turbo_confirm: "Delete this list?" } %>
+  <section class="empty-state">
+    <h2>No books in this list yet</h2>
+    <p>Add a book to start building this list, or delete it if you do not need it anymore.</p>
+    <div class="button-row">
+      <%= link_to "Add book", new_list_bookmark_path(@list), class: "btn btn-primary" %>
+      <%= link_to "Delete list",
+                  list_path(@list),
+                  class: "btn btn-outline-danger",
+                  data: { turbo_method: :delete, turbo_confirm: "Delete this list?" } %>
+    </div>
+  </section>
 <% end %>

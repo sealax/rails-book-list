@@ -1,6 +1,16 @@
-<h1>Create a new reading list</h1>
+<section class="page-header page-header--compact">
+  <div>
+    <p class="page-eyebrow">New list</p>
+    <h1>Create a reading list</h1>
+  </div>
 
-<%= simple_form_for @list do |f| %>
+  <%= link_to "Back to lists", lists_path, class: "btn btn-outline-secondary" %>
+</section>
+
+<%= simple_form_for @list, html: { class: "form-panel" } do |f| %>
   <%= f.input :name %>
-  <%= f.submit %>
+
+  <div class="form-actions">
+    <%= f.submit "Create list", class: "btn btn-primary" %>
+  </div>
 <% end %>
