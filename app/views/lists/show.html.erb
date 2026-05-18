@@ -4,15 +4,19 @@
 
 
 
-<% @list.bookmarks.each do |bookmark| %>
-  <div>
-    <% if bookmark.book.cover_url.present? %>
-      <%= image_tag bookmark.book.cover_url, width: 120 %>
-    <% end %>
+<% if @list.bookmarks.any? %>
+  <% @list.bookmarks.each do |bookmark| %>
+    <div>
+      <% if bookmark.book.cover_url.present? %>
+        <%= image_tag bookmark.book.cover_url, width: 120 %>
+      <% end %>
 
-    <h3><%= bookmark.book.title %></h3>
-    <p><%= bookmark.book.author %></p>
-    <p><%= bookmark.comment %></p>
-    <p>Rating: <%= bookmark.rating %></p>
-  </div>
+      <h3><%= bookmark.book.title %></h3>
+      <p><%= bookmark.book.author %></p>
+      <p><%= bookmark.comment %></p>
+      <p>Rating: <%= bookmark.rating %></p>
+    </div>
+  <% end %>
+<% else %>
+  <p>No books in this list yet.</p>
 <% end %>
