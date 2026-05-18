@@ -1,5 +1,3 @@
-
-
 class BookmarksController < ApplicationController
   require "open-uri"
   require "json"
@@ -28,26 +26,33 @@ class BookmarksController < ApplicationController
       book.description = "Added from Open Library"
     end
 
+    @bookmark = Bookmark.new(
+      list: @list,
+      book: @book,
+      comment: params[:comment],
+      rating: params[:rating]
+    )
 
-  @bookmark = Bookmark.new(
-    list: @list,
-    book: @book,
-    comment: params[:comment],
-    rating: params[:rating]
-  )
+    if @bookmark.save
+      redirect_to list_path(@list)
+    else
+      flash.now[:alert] = @bookmark.errors.full_messages.join(", ")
 
-  if @bookmark.save
-    redirect_to list_path(@list)
-  else
-    flash.now[:alert] = @bookmark.errors.full_messages.join(", ")
-
-    @results = [ {
-      "title" => params[:title],
-      "author_name" => [ params[:author] ],
-      "key" => params[:open_library_key],
-      "cover_url" => params[:cover_url]
-    } ]
-    render :new, status: :unprocessable_entity
+      @results = [ {
+        "title" => params[:title],
+        "author_name" => [ params[:author] ],
+        "key" => params[:open_library_key],
+        "cover_url" => params[:cover_url]
+      } ]
+      render :new, status: :unprocessable_entity
+    end
   end
+
+  def destroy
+    @bookmark = Bookmark.find(params[:id])
+    list = @bookmark.list
+
+    @bookmark.destroy
+    redirect_to list_path(list), notice: "Book deleted from list."
   end
 end
