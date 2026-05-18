@@ -25,9 +25,11 @@
 
   <body>
     <% flash.each do |type, message| %>
-      <p><%= message %></p>
+      <p class="flash-message flash-message--<%= type %>"><%= message %></p>
     <% end %>
 
-    <%= yield %>
+    <main class="app-shell">
+      <%= yield %>
+    </main>
   </body>
 </html>
